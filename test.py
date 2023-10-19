@@ -7,27 +7,44 @@ def main():
     st.markdown(
         """
         <style>
-            .stButton>button {
-                background: linear-gradient(to right, #ff7e5f, #feb47b); /* Gradient Color */
-                border: none;              /* Remove border */
-                color: #FFF;               /* White text color */
-                padding: 10px 25px;        /* Some padding */
-                text-align: center;        /* Centered text */
-                display: inline-block;     /* Inline block */
-                cursor: pointer;           /* Pointer/hand cursor on hover */
-                border-radius: 50px;       /* Very rounded corners to give bubble effect */
-                font-size: 16px;           /* Font size */
-                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1); /* Shadow for 3D effect */
-                transition: all 0.3s ease 0s; /* Smooth transition effect on hover */
-            }
+  .stButton>button {
+    background-color: #C07156;
+    border: none;
+    color: white; /* Color of the text */
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 15px; /* Adjusted for slightly rounded rectangle */
+    box-shadow: 0 9px 18px rgba(0,0,0,0.25);
+    transition: transform 0.2s;
+    outline: none; /* Removes the default browser outline */
+  }
 
-            .stButton>button:hover {
-                background: linear-gradient(to right, #feb47b, #ff7e5f); /* Gradient Color on hover (colors reversed) */
-                box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2); /* More pronounced shadow on hover */
-                color: #fff;
-                transform: translateY(-7px); /* Slight move upwards */
-            }
-        </style>
+  .stButton>button:hover,
+  .stButton>button:active, /* Selector for the active state (i.e., while clicking) */
+  .stButton>button:focus, /* Selector for the focus state */
+  .stButton>button:hover:focus,
+  .stButton>button:active:focus {
+    background-color: #C07156; /* Keeps the same background color */
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-7px);
+    outline: none; /* Removes the default browser outline */
+  }
+
+  .stButton>button,
+  .stButton>button:hover,
+  .stButton>button:active,
+  .stButton>button:focus,
+  .stButton>button:hover:focus,
+  .stButton>button:active:focus {
+    color: white !important; /* Ensuring the text color remains white in all states */
+  }
+</style>
+
         """,
         unsafe_allow_html=True,
     )
@@ -66,10 +83,6 @@ def main():
             {"title": "Article 3", "summary": "This is the summary of Article 3..."},
             # ... add more articles as needed
         ]
-
-        # Convert articles list to DataFrame for table display
-        df_articles = pd.DataFrame(articles)[["title"]]  # Only display the title in the table
-        st.table(df_articles.reset_index(drop=True))
 
         # Create a list of article titles for selection
         article_titles = [article["title"] for article in articles]

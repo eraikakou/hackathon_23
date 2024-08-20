@@ -223,3 +223,44 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+# Function to extract a simplified representation
+def extract_simplified_representation(node):
+    representation = ""
+
+    def traverse(node, depth=0):
+        nonlocal representation
+
+        if node.type == "class_declaration":
+            class_name = node.child_by_field_name("name").text.decode("utf-8")
+            representation += f"Class: {class_name}\n"
+
+            # Traverse class body
+            class_body = node.child_by_field_name("body")
+            for child in class_body.children:
+                traverse(child, depth + 2)
+
+        elif node.type == "method_declaration":
+            method_name = node.child_by_field_name("name").text.decode("utf-8")
+            parameters = node.child_by_field_name("parameters")
+            return_type = node.child_by_field_name("return_type").text.decode("utf-8")
+            param_list = ", ".join([param.text.decode("utf-8") for param in parameters.children if param.is_named])
+            representation += f"{' ' * depth}- Method: {method_name}({param_list}) -> {return_type}\n"
+
+        elif node.type == "import_declaration":
+            import_name = node.child_by_field_name("path").text.decode("utf-8")
+            representation += f"  - Import: {import_name}\n"
+
+        # Traverse children for potential nested structures
+        for child in node.children:
+            if child.is_named:  # Skip non-named nodes (e.g., semicolons, brackets)
+                traverse(child, depth)
+
+    traverse(root_node)
+    return representation
+
+# Generate and print the simplified representation
+simplified_representation = extract_simplified_representation(root_node)
+print(simplified_representation)

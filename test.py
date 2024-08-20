@@ -1,8 +1,4 @@
 
-# Parse the Java code
-tree = parser.parse(bytes(java_code, "utf8"))
-root_node = tree.root_node
-
 # Function to extract a simplified representation
 def extract_simplified_representation(node):
     representation = ""
@@ -72,8 +68,8 @@ def extract_simplified_representation(node):
 
     traverse(root_node)
 
-    # Identify dependencies that are not part of imports or Java standard library
-    external_dependencies = used_classes - set(imports)
+    # Identify external dependencies that are not part of imports or Java standard library
+    external_dependencies = used_classes - set(imports) - standard_java_types
 
     representation += "\nExternal Dependencies:\n"
     for dependency in external_dependencies:

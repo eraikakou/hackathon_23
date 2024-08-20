@@ -1,3 +1,9 @@
+# List of standard Java types to exclude
+standard_java_types = {
+    "String", "List", "ArrayList", "Map", "HashMap", "Set", "HashSet", "Integer", "Double", "Float", "Character", "Boolean", "Byte", "Short", "Long", "Void",
+    "java.util.List", "java.util.ArrayList", "java.util.Map", "java.util.HashMap", "java.util.Set", "java.util.HashSet",
+    # Add more standard types as needed
+}
 
 # Function to extract a simplified representation
 def extract_simplified_representation(node):
@@ -43,18 +49,10 @@ def extract_simplified_representation(node):
                     traverse(child, depth + 4)
 
         elif node.type == "import_declaration":
-            # Handle full import path
-            import_path_node = node.child_by_field_name("path")
-            if import_path_node:
-                import_name = ""
-                for child in import_path_node.children:
-                    if child.is_named:
-                        import_name += child.text.decode("utf-8") + "."
-                import_name = import_name.rstrip(".")
-                imports.append(import_name)
-                representation += f"  - Import: {import_name}\n"
-            else:
-                representation += "  - Import: UnknownImport\n"
+            # Extract full import path using the entire node text
+            import_name = node.text.decode("utf-8").replace("import ", "").replace(";", "")
+            imports.append(import_name)
+            representation += f"  - Import: {import_name}\n"
 
         elif node.type == "type_identifier" or node.type == "object_creation_expression":
             # Handle type usage or object creation
@@ -77,6 +75,3 @@ def extract_simplified_representation(node):
 
     return representation
 
-# Generate and print the simplified representation
-simplified_representation = extract_simplified_representation(root_node)
-print(simplified_representation)
